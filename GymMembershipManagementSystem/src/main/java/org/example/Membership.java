@@ -7,6 +7,8 @@ interface Membership {
 
 class RegularMembership implements Membership{
 
+    public RegularMembership(){}
+
     @Override
     public String getType() {
         return "Regular";
