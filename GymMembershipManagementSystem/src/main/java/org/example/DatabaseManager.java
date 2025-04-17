@@ -34,4 +34,17 @@ public class DatabaseManager {
                 )
                 """;
     }
+
+    public static void main(String[] args) {
+        try{
+                Connection conn=connect();
+                if(conn != null)
+                    System.out.println("Connection to Sqlite has been established!");
+
+            }
+           catch(Exception e)
+           {
+                System.out.println("Failed to connect: "+e.getMessage());
+            }
+    }
 }
