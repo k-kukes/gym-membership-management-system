@@ -1,8 +1,16 @@
-package org.example;
+package org.example.gymmembershipsystem;
 
 public class EmployeeManager {
     public EmployeeManager(){
 
+    }
+
+    public static void registerNewEmployee(Employee employee){
+        DatabaseManager.insertEmployee(employee);
+    }
+
+    public static Employee login(String username, String password){
+        return DatabaseManager.loginEmployeeValidation(username, password);
     }
 
     public void addNewMember(){
