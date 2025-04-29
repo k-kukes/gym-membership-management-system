@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -61,7 +62,10 @@ public class MemberManagerScreen extends Application {
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(e -> deleteMember());
 
-        HBox bottomButtons = new HBox(10, updateButton, deleteButton);
+        Button addButton = new Button("Add New Member");
+        addButton.setOnAction(e -> addMember());
+
+        HBox bottomButtons = new HBox(10, updateButton, deleteButton, addButton);
         layout.setBottom(bottomButtons);
 
         Scene scene = new Scene(layout, 600, 400);
@@ -69,6 +73,44 @@ public class MemberManagerScreen extends Application {
         stage.show();
 
         loadAllMembers();
+    }
+
+    private void addMember(){
+        MemberAddScreen memberAddScreen = new MemberAddScreen();
+        Stage stage = new Stage();
+        try {
+            memberAddScreen.start(stage);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void showUpdateForm(Member member){
+        Stage stage = new Stage();
+        stage.setTitle("Update Member");
+
+        TextField fNameField = new TextField(member.getfName());
+        TextField lNameField = new TextField(member.getlName());
+        TextField phoneNoField = new TextField(member.getPhoneNo());
+        TextField addressField = new TextField(member.getAddress());
+
+        Button saveButton = new Button("Save Changes");
+        saveButton.setOnAction(e -> {
+            member.setfName(fNameField.getText());
+            member.setlName(lNameField.getText());
+            member.setPhoneNo(phoneNoField.getText());
+            member.setAddress(addressField.getText());
+
+            DatabaseManager.updateMember(member);
+            stage.close();
+        });
+
+        VBox layout = new VBox(10);
+        layout.getChildren().addAll(fNameField, lNameField, phoneNoField, addressField, saveButton);
+        Scene scene = new Scene(layout, 300, 250);
+        stage.setScene(scene);
+        stage.show();
     }
 
     private void loadAllMembers(){

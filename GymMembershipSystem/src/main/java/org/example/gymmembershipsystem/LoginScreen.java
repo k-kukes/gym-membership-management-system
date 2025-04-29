@@ -63,7 +63,8 @@ public class LoginScreen extends Application {
                 loginStage.close();
             }
             else {
-                System.out.println("Invalid username or password");
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Invalid Username Or Password!");
+                alert.showAndWait();
             }
         });
 

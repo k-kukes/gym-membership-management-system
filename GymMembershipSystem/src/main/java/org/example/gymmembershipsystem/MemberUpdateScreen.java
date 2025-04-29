@@ -1,6 +1,7 @@
 package org.example.gymmembershipsystem;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -26,11 +27,16 @@ public class MemberUpdateScreen {
             member.setlName(lNameField.getText());
             member.setPhoneNo(phoneNoField.getText());
             member.setAddress(addressField.getText());
-            if (membershipComboBox.getValue().equals("Premimum"))
+            if (membershipComboBox.getValue().equals("Premium"))
                 member.setMembershipType(new PremiumMembership());
             else
                 member.setMembershipType(new RegularMembership());
             DatabaseManager.updateMember(member);
+
+            Alert success = new Alert(Alert.AlertType.INFORMATION);
+            success.setTitle("Success");
+            success.setContentText("Member updated successfully!");
+            success.showAndWait();
             stage.close();
         });
 

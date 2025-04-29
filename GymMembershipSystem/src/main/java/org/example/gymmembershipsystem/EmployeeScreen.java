@@ -29,6 +29,15 @@ public class EmployeeScreen extends Application {
         Button viewLogsButton = new Button("View Activity Logs");
         viewLogsButton.setOnAction(e -> viewActivityLogs());
 
+        Button addEmployeeButton = new Button("Add Employee");
+        addEmployeeButton.setOnAction(e -> {
+            try {
+                EmployeeAddScreen.show();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
         Button logoutButton = new Button("Logout");
         logoutButton.setOnAction(e -> {
             LoginScreen loginScreen = new LoginScreen();
@@ -40,7 +49,7 @@ public class EmployeeScreen extends Application {
             }
         });
 
-        layout.getChildren().addAll(welcomeLabel, manageMembersButton, viewLogsButton, logoutButton);
+        layout.getChildren().addAll(welcomeLabel, manageMembersButton, viewLogsButton, addEmployeeButton,logoutButton);
 
         Scene scene = new Scene(layout, 300, 250);
         stage.setScene(scene);
