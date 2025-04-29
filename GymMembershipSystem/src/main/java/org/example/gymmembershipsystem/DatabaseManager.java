@@ -12,7 +12,7 @@ public class DatabaseManager {
 
     private DatabaseManager(){
         String Base_Path = "jdbc:sqlite:src/main/resources/database/";
-        String DB_Path = Base_Path + "data.db";
+        String DB_Path = Base_Path + "dataNew.db";
         try {
             connection = DriverManager.getConnection(DB_Path);
             System.out.println("Connected to database");
@@ -49,7 +49,8 @@ public class DatabaseManager {
                     renewedMembership TEXT,
                     nextPayment DATE,
                     contractEnd DATE,
-                    latestEntry DATE
+                    latestEntry DATE,
+                    balance  DECIMAL(10,2)
                 )
                 """;
 
@@ -131,7 +132,7 @@ public class DatabaseManager {
                 UPDATE members
                 SET firstName = ?, lastName = ?, dob = ?, phoneNo = ?, address = ?,
                 membershipCreation = ?, membershipType = ?, renewedMembership = ?,
-                nextPayment = ?, contractEnd = ?, latestEntry = ?
+                nextPayment = ?, contractEnd = ?, latestEntry = ?, balance = ?
                 WHERE username = ?
                 """;
 
@@ -151,6 +152,7 @@ public class DatabaseManager {
             stmt.setString(10, member.getContractEndDate());
             stmt.setString(11, member.getLatestEntry());
             stmt.setString(12, member.getLoginUsername());
+            stmt.setDouble(13, member.getBalance());
 
             stmt.executeUpdate();
             System.out.println("Member updated successfully");
@@ -278,7 +280,8 @@ public class DatabaseManager {
                         set.getBoolean("renewedMembership"),
                         set.getString("nextPayment"),
                         set.getString("contractEnd"),
-                        set.getString("latestEntry")
+                        set.getString("latestEntry"),
+                        set.getDouble("balance")
                 );
             }
         }
@@ -345,7 +348,8 @@ public class DatabaseManager {
                         set.getBoolean("renewedMembership"),
                         set.getString("nextPayment"),
                         set.getString("contractEnd"),
-                        set.getString("latestEntry")
+                        set.getString("latestEntry"),
+                        set.getDouble("balance")
                 );
                 members.add(member);
             }
@@ -379,7 +383,8 @@ public class DatabaseManager {
                         set.getBoolean("renewedMembership"),
                         set.getString("nextPayment"),
                         set.getString("contractEnd"),
-                        set.getString("latestEntry")
+                        set.getString("latestEntry"),
+                        set.getDouble("balance")
                 );
                 members.add(member);
             }
@@ -390,16 +395,79 @@ public class DatabaseManager {
         return members;
     }
 
+    public static void updateMemberPaymentStatus(Member member){
+        String sql = "UPDATE members SET nextPayment = ?, latestEntry = ? WHERE username = ?";
+
+        try {
+            Connection conn = DatabaseManager.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, member.getNextPaymentDate());
+            stmt.setString(2, member.getLatestEntry());
+            stmt.setString(3, member.getLoginUsername());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void updateMemberMembershipType(Member member){
+        String sql = "UPDATE members SET membershipType = ? WHERE username = ?";
+        try {
+            Connection conn = DatabaseManager.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, member.getMembershipType().getType());
+            stmt.setString(2, member.getLoginUsername());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void processCancellationPenalty(Member member, double fee){
+        String sql = "UPDATE members SET balance = balance - ? WHERE username = ?";
+
+        try {
+            Connection conn = DatabaseManager.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setDouble(1, fee);
+            stmt.setString(2, member.getLoginUsername());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void updateMemberCancellationStatus(Member member){
+        String sql = "DELETE FROM members WHERE username = ?";
+
+        try {
+            Connection conn = DatabaseManager.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, member.getLoginUsername());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
         createMembersTable();
         createEmployeesTable();
-        Member member = new Member("Kukes", "Password", "Kukes",
-                "Kanthasamy", "2005-08-30", "514-838-8939", "546 Spring-Garden",
-                "2022-08-30", new RegularMembership(), true,
-                "2025-05-29", "2026-03-04", "2024-04-26");
+        Member member = new Member("BiscuitFan123", "Password", "Cookie",
+                "Monster", "1997-12-12", "600-600-6000", "Sesame street",
+                "2002-05-12", new PremiumMembership(), true,
+                "2025-09-29", "2025-09-04", "2024-04-28",
+                9807.23);
 
         Employee employee = new Employee("Fahad", "Password", "Fahad",
                 "Malik", "2003-05-23", "514-939-2020", "675 Laval street",
                 "2024-05-23", "Nothing");
+
+//        insertEmployee(employee);
+        insertMember(member);
     }
 }

@@ -6,15 +6,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MemberManagerScreen extends Application {
     private Employee employee;
@@ -74,16 +72,28 @@ public class MemberManagerScreen extends Application {
     }
 
     private void loadAllMembers(){
-        List<Member> memberList = DatabaseManager.getAllMembers();
-        memberData.clear();
-        memberData.addAll(memberList);
+        try {
+            List<Member> memberList = DatabaseManager.getAllMembers();
+            memberData.clear();
+            memberData.addAll(memberList);
+        }
+        catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR,e.getMessage());
+            alert.showAndWait();
+        }
+
     }
 
     private void searchMembers(){
         String search = searchField.getText();
-        List<Member> members = DatabaseManager.searchMembers("firstName", search);
-        memberData.clear();
-        memberData.addAll(members);
+        if (search.isEmpty())
+            loadAllMembers();
+        else {
+            List<Member> members = DatabaseManager.searchMembers("firstName", search);
+            memberData.clear();
+            memberData.addAll(members);
+        }
+
     }
 
     private void updateMember(){
@@ -97,9 +107,15 @@ public class MemberManagerScreen extends Application {
     private void deleteMember(){
         Member member = memberTable.getSelectionModel().getSelectedItem();
         if (member != null){
-            System.out.println("Deleting member");
-            DatabaseManager.deleteMember(member.getLoginUsername());
-            loadAllMembers();
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Are you sure you want to delete the member?", ButtonType.YES, ButtonType.NO);
+            confirmationAlert.showAndWait().ifPresent(input -> {
+                if (input == ButtonType.YES){
+                    System.out.println("Deleting member");
+                    DatabaseManager.deleteMember(member.getLoginUsername());
+                    loadAllMembers();
+                }
+            });
         }
     }
 

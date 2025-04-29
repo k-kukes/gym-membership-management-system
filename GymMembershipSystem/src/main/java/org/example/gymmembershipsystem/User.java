@@ -117,8 +117,9 @@ class Member extends User{
     private String nextPaymentDate;
     private String contractEndDate;
     private String latestEntry;
+    private double balance;
 
-    public Member(String loginUsername, String loginPassword, String fName, String lName, String dob, String phoneNo, String address, String membershipCreationDate, Membership membershipType, boolean renewedMembership, String nextPaymentDate, String contractEndDate, String latestEntry) {
+    public Member(String loginUsername, String loginPassword, String fName, String lName, String dob, String phoneNo, String address, String membershipCreationDate, Membership membershipType, boolean renewedMembership, String nextPaymentDate, String contractEndDate, String latestEntry, double balance) {
         super(loginUsername, loginPassword, fName, lName, dob, phoneNo, address);
         this.membershipCreationDate = membershipCreationDate;
         this.membershipType = membershipType;
@@ -126,6 +127,7 @@ class Member extends User{
         this.nextPaymentDate = nextPaymentDate;
         this.contractEndDate = contractEndDate;
         this.latestEntry = latestEntry;
+        this.balance = balance;
     }
 
     @Override
@@ -179,5 +181,13 @@ class Member extends User{
 
     public void setLatestEntry(String latestEntry) {
         this.latestEntry = latestEntry;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 }
