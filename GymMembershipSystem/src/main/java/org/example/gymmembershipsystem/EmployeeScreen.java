@@ -76,6 +76,8 @@ public class EmployeeScreen extends Application {
 
     private void viewActivityLogs(){
         System.out.println("Viewing employee activity logs...");
+        LogScreen screen = new LogScreen();
+        screen.showLogScreen(employee);
     }
 
     public static void main(String[] args) {

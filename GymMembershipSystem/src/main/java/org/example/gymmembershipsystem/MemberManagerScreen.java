@@ -125,38 +125,11 @@ public class MemberManagerScreen extends Application {
         MemberAddScreen memberAddScreen = new MemberAddScreen();
         Stage stage = new Stage();
         try {
-            memberAddScreen.start(stage);
+            memberAddScreen.showStage(stage, employee);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
         }
-    }
-
-    public static void showUpdateForm(Member member){
-        Stage stage = new Stage();
-        stage.setTitle("Update Member");
-
-        TextField fNameField = new TextField(member.getfName());
-        TextField lNameField = new TextField(member.getlName());
-        TextField phoneNoField = new TextField(member.getPhoneNo());
-        TextField addressField = new TextField(member.getAddress());
-
-        Button saveButton = new Button("Save Changes");
-        saveButton.setOnAction(e -> {
-            member.setfName(fNameField.getText());
-            member.setlName(lNameField.getText());
-            member.setPhoneNo(phoneNoField.getText());
-            member.setAddress(addressField.getText());
-
-            DatabaseManager.updateMember(member);
-            stage.close();
-        });
-
-        VBox layout = new VBox(10);
-        layout.getChildren().addAll(fNameField, lNameField, phoneNoField, addressField, saveButton);
-        Scene scene = new Scene(layout, 300, 250);
-        stage.setScene(scene);
-        stage.show();
     }
 
     private void loadAllMembers(){
@@ -185,7 +158,7 @@ public class MemberManagerScreen extends Application {
     private void updateMember(){
         Member member = memberTable.getSelectionModel().getSelectedItem();
         if (member != null){
-            MemberUpdateScreen.showUpdateForm(member);
+            MemberUpdateScreen.showUpdateForm(member, employee);
             loadAllMembers();
         }
     }
@@ -198,6 +171,9 @@ public class MemberManagerScreen extends Application {
             confirmationAlert.showAndWait().ifPresent(input -> {
                 if (input == ButtonType.YES){
                     System.out.println("Deleting member");
+                    employee.setLatestLog(employee.getLatestLog() + "\n" + "Deleted Member " +
+                            member.getfName() + " " + member.getlName());
+                    DatabaseManager.updateLogs(employee);
                     DatabaseManager.deleteMember(member.getLoginUsername());
                     loadAllMembers();
                 }

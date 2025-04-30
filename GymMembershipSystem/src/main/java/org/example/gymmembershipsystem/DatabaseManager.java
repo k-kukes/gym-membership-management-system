@@ -285,6 +285,48 @@ public class DatabaseManager {
         return employees;
     }
 
+    public static List<String> getLogs(String username){
+        String sql = "SELECT latestLog FROM employees WHERE username = ?";
+        List<String> resultLogs = new ArrayList<>();
+
+        try {
+            Connection conn = DatabaseManager.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            ResultSet set = stmt.executeQuery();
+
+            if (set.next()){
+                String allLogs = set.getString("latestLog");
+                String[] logsArray = allLogs.split("\n");
+
+                for (String log : logsArray){
+                    if (!log.trim().isEmpty())
+                        resultLogs.add(log.trim());
+                }
+            }
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return resultLogs;
+    }
+
+    public static void updateLogs(Employee employee){
+        String sql = "UPDATE employees SET latestLog = ? WHERE username = ?";
+
+        try {
+            Connection conn = DatabaseManager.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, employee.getLatestLog());
+            stmt.setString(2, employee.getLoginUsername());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static List<Employee> getAllEmployees() {
         List<Employee> employees = new ArrayList<>();
         String sql = "SELECT * FROM employees";

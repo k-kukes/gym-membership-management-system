@@ -1,12 +1,13 @@
 package org.example.gymmembershipsystem;
 
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MemberUpdateScreen {
-    public static void showUpdateForm(Member member){
+    public static void showUpdateForm(Member member, Employee employee){
         Stage stage = new Stage();
         stage.setTitle("Update Member");
 
@@ -38,6 +39,9 @@ public class MemberUpdateScreen {
             else
                 member.setMembershipType(new RegularMembership());
             DatabaseManager.updateMember(member);
+
+            employee.setLatestLog(employee.getLatestLog() + "\n" + "Updated Member " + member.getfName() + " " + member.getlName());
+            DatabaseManager.updateLogs(employee);
 
             Alert success = new Alert(Alert.AlertType.INFORMATION);
             success.setTitle("Success");

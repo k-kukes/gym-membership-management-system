@@ -77,15 +77,6 @@ public class LoginScreen extends Application {
         stage.show();
     }
 
-    private void openMainScreen(String role) throws Exception {
-        DashboardScreen dashboardScreen = new DashboardScreen(role);
-        Stage dashboardStage = new Stage();
-        dashboardScreen.start(dashboardStage);
-
-        Stage loginStage = (Stage) usernameField.getScene().getWindow();
-        loginStage.close();
-    }
-
     public static void main(String[] args) {
         launch(args);
     }

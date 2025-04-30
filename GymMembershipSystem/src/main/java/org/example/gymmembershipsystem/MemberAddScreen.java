@@ -6,9 +6,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class MemberAddScreen extends Application {
-    @Override
-    public void start(Stage stage) throws Exception {
+public class MemberAddScreen {
+    public void showStage(Stage stage, Employee employee) throws Exception {
         stage.setTitle("Add New Member");
 
         TextField usernameField = new TextField();
@@ -79,6 +78,10 @@ public class MemberAddScreen extends Application {
                         renewed, paymentDate, contractEnd, latestEntry, balance);
 
                 DatabaseManager.insertMember(newMember);
+                employee.setLatestLog(employee.getLatestLog() +
+                        "\n" + "Added Member " + newMember.getfName() + " " + newMember.getlName());
+                DatabaseManager.updateLogs(employee);
+
                 Alert addedMemberAlert = new Alert(Alert.AlertType.INFORMATION, "Member was successfully added!");
                 addedMemberAlert.showAndWait();
             }
@@ -94,9 +97,5 @@ public class MemberAddScreen extends Application {
         Scene scene = new Scene(layout, 400, 600);
         stage.setScene(scene);
         stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
