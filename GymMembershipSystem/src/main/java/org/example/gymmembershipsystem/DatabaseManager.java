@@ -1,7 +1,5 @@
 package org.example.gymmembershipsystem;
 
-import javafx.scene.chart.PieChart;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +32,7 @@ public class DatabaseManager {
     }
 
     public static void createMembersTable(){
+        // membershipType, renewedMembership, nextPayment, contractEnd, balance should be NOT NULL
         String sql = """
                 CREATE TABLE IF NOT EXISTS members (
                     id INTEGER IDENTITY(1,1) PRIMARY KEY,
@@ -151,8 +150,8 @@ public class DatabaseManager {
             stmt.setString(9, member.getNextPaymentDate());
             stmt.setString(10, member.getContractEndDate());
             stmt.setString(11, member.getLatestEntry());
-            stmt.setString(12, member.getLoginUsername());
-            stmt.setDouble(13, member.getBalance());
+            stmt.setDouble(12, member.getBalance());
+            stmt.setString(13, member.getLoginUsername());
 
             stmt.executeUpdate();
             System.out.println("Member updated successfully");
@@ -253,6 +252,67 @@ public class DatabaseManager {
             System.out.println("Error deleting Employee");
             System.out.println(e.getMessage());
         }
+    }
+
+    public static List<Employee> searchEmployees(String filter, String value) {
+        List<Employee> employees = new ArrayList<>();
+        String sql = "SELECT * FROM members WHERE " + filter + " = ?";
+
+        try {
+            Connection conn = DatabaseManager.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, value);
+            ResultSet set = stmt.executeQuery();
+
+            while (set.next()) {
+                Employee employee = new Employee(
+                        set.getString("username"),
+                        set.getString("password"),
+                        set.getString("firstName"),
+                        set.getString("lastName"),
+                        set.getString("dob"),
+                        set.getString("phoneNo"),
+                        set.getString("address"),
+                        set.getString("dateHired"),
+                        set.getString("latestLog")
+                );
+                employees.add(employee);
+            }
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return employees;
+    }
+
+    public static List<Employee> getAllEmployees() {
+        List<Employee> employees = new ArrayList<>();
+        String sql = "SELECT * FROM employees";
+
+        try {
+            Connection conn = DatabaseManager.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet set = stmt.executeQuery();
+
+            while (set.next()) {
+                Employee employee = new Employee(
+                        set.getString("username"),
+                        set.getString("password"),
+                        set.getString("firstName"),
+                        set.getString("lastName"),
+                        set.getString("dob"),
+                        set.getString("phoneNo"),
+                        set.getString("address"),
+                        set.getString("dateHired"),
+                        set.getString("latestLog")
+                );
+                employees.add(employee);
+            }
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return employees;
     }
 
     public static Member loginMemberValidation(String username, String password){

@@ -41,6 +41,7 @@ public class EmployeeAddScreen{
                     phoneNoField.getText(), addressField.getText(), dateHiredField.getText(),
                     latestLogField.getText());
 
+            DatabaseManager.insertEmployee(newEmployee);
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Employee added successfully");
             stage.close();
         });

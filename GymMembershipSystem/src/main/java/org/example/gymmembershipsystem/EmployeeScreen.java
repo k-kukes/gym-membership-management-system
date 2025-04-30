@@ -26,17 +26,11 @@ public class EmployeeScreen extends Application {
         Button manageMembersButton = new Button("Manage Members");
         manageMembersButton.setOnAction(e -> manageMembers());
 
+        Button manageEmployeesButton = new Button("Manage Employees");
+        manageEmployeesButton.setOnAction(e -> manageEmployees());
+
         Button viewLogsButton = new Button("View Activity Logs");
         viewLogsButton.setOnAction(e -> viewActivityLogs());
-
-        Button addEmployeeButton = new Button("Add Employee");
-        addEmployeeButton.setOnAction(e -> {
-            try {
-                EmployeeAddScreen.show();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        });
 
         Button logoutButton = new Button("Logout");
         logoutButton.setOnAction(e -> {
@@ -49,7 +43,7 @@ public class EmployeeScreen extends Application {
             }
         });
 
-        layout.getChildren().addAll(welcomeLabel, manageMembersButton, viewLogsButton, addEmployeeButton,logoutButton);
+        layout.getChildren().addAll(welcomeLabel, manageMembersButton, manageEmployeesButton,viewLogsButton,logoutButton);
 
         Scene scene = new Scene(layout, 300, 250);
         stage.setScene(scene);
@@ -62,6 +56,18 @@ public class EmployeeScreen extends Application {
         Stage stage = new Stage();
         try {
             memberManagerScreen.start(stage);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void manageEmployees(){
+        System.out.println("Managing Employees...");
+        EmployeeManagerScreen employeeManagerScreen = new EmployeeManagerScreen(employee);
+        Stage stage = new Stage();
+        try {
+            employeeManagerScreen.start(stage);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
