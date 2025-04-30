@@ -108,7 +108,10 @@ public class MemberManagerScreen extends Application {
         Button addButton = new Button("Add New Member");
         addButton.setOnAction(e -> addMember());
 
-        HBox bottomButtons = new HBox(10, updateButton, deleteButton, addButton);
+        Button refreshTable = new Button("Refresh Table");
+        refreshTable.setOnAction(e -> loadAllMembers());
+
+        HBox bottomButtons = new HBox(10, updateButton, deleteButton, addButton, refreshTable);
         layout.setBottom(bottomButtons);
 
         Scene scene = new Scene(layout, 600, 450);
@@ -173,8 +176,6 @@ public class MemberManagerScreen extends Application {
         if (search.isEmpty())
             loadAllMembers();
         else {
-
-
             List<Member> members = DatabaseManager.searchMembers(filter, search);
             memberData.clear();
             memberData.addAll(members);

@@ -36,13 +36,22 @@ public class EmployeeAddScreen{
 
         Button addButton = new Button("Add Employee");
         addButton.setOnAction(e -> {
-            Employee newEmployee = new Employee(usernameField.getText(), passwordField.getText(),
-                    firstNameField.getText(), lastNameField.getText(), dobField.getText(),
-                    phoneNoField.getText(), addressField.getText(), dateHiredField.getText(),
-                    latestLogField.getText());
+            if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()
+            || firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()){
+                Alert warningAlert = new Alert(Alert.AlertType.ERROR, "Following Fields should contain a value: \n" +
+                        "First Name, Last Name, username and password");
+                warningAlert.showAndWait();
+            }
+            else {
+                Employee newEmployee = new Employee(usernameField.getText(), passwordField.getText(),
+                        firstNameField.getText(), lastNameField.getText(), dobField.getText(),
+                        phoneNoField.getText(), addressField.getText(), dateHiredField.getText(),
+                        latestLogField.getText());
 
-            DatabaseManager.insertEmployee(newEmployee);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Employee added successfully");
+                DatabaseManager.insertEmployee(newEmployee);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Employee added successfully");
+                alert.showAndWait();
+            }
             stage.close();
         });
 

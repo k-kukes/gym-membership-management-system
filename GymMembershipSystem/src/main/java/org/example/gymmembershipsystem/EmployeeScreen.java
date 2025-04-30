@@ -29,7 +29,7 @@ public class EmployeeScreen extends Application {
         Button manageEmployeesButton = new Button("Manage Employees");
         manageEmployeesButton.setOnAction(e -> manageEmployees());
 
-        Button viewLogsButton = new Button("View Activity Logs");
+        Button viewLogsButton = new Button("View Latest Activity");
         viewLogsButton.setOnAction(e -> viewActivityLogs());
 
         Button logoutButton = new Button("Logout");

@@ -256,7 +256,7 @@ public class DatabaseManager {
 
     public static List<Employee> searchEmployees(String filter, String value) {
         List<Employee> employees = new ArrayList<>();
-        String sql = "SELECT * FROM members WHERE " + filter + " = ?";
+        String sql = "SELECT * FROM employees WHERE " + filter + " = ?";
 
         try {
             Connection conn = DatabaseManager.getInstance().getConnection();

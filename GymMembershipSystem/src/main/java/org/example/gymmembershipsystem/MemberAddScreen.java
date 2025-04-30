@@ -79,6 +79,8 @@ public class MemberAddScreen extends Application {
                         renewed, paymentDate, contractEnd, latestEntry, balance);
 
                 DatabaseManager.insertMember(newMember);
+                Alert addedMemberAlert = new Alert(Alert.AlertType.INFORMATION, "Member was successfully added!");
+                addedMemberAlert.showAndWait();
             }
             stage.close();
         });

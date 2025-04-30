@@ -70,10 +70,10 @@ public class EmployeeManagerScreen extends Application {
         layout.setCenter(employeeTable);
 
 
-        Button deleteButton = new Button("Delete Employee");
+        Button deleteButton = new Button("Delete Employee ");
         deleteButton.setOnAction(e -> deleteEmployee());
 
-        Button addEmployeeButton = new Button("Add Employee");
+        Button addEmployeeButton = new Button("Add Employee ");
         addEmployeeButton.setOnAction(e -> {
             try {
                 EmployeeAddScreen.show();
@@ -82,7 +82,10 @@ public class EmployeeManagerScreen extends Application {
             }
         });
 
-        HBox bottomButtons = new HBox(deleteButton, addEmployeeButton);
+        Button refreshButton = new Button("Refresh Table ");
+        refreshButton.setOnAction( e -> loadAllEmployees());
+
+        HBox bottomButtons = new HBox(deleteButton, addEmployeeButton, refreshButton);
         layout.setBottom(bottomButtons);
 
         Scene scene = new Scene(layout, 450, 300);
