@@ -85,7 +85,7 @@ public class EmployeeManagerScreen extends Application {
         HBox bottomButtons = new HBox(deleteButton, addEmployeeButton);
         layout.setBottom(bottomButtons);
 
-        Scene scene = new Scene(layout, 400, 300);
+        Scene scene = new Scene(layout, 450, 300);
         stage.setScene(scene);
         stage.show();
 
@@ -112,7 +112,7 @@ public class EmployeeManagerScreen extends Application {
             return false;
         }
 
-        if (emp == employee){
+        if (emp.getLoginUsername().equals(employee.getLoginUsername())){
             Alert selfDeleteAlert = new Alert(Alert.AlertType.ERROR, "Can't delete yourself!");
             selfDeleteAlert.showAndWait();
             return false;

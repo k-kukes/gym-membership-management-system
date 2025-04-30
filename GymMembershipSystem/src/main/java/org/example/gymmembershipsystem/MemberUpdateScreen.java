@@ -1,10 +1,7 @@
 package org.example.gymmembershipsystem;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -13,10 +10,19 @@ public class MemberUpdateScreen {
         Stage stage = new Stage();
         stage.setTitle("Update Member");
 
+        Label fnameLabel = new Label("First Name:");
         TextField fNameField = new TextField(member.getfName());
+        fNameField.setPromptText("First Name");
+        Label lnameLabel = new Label("Last Name:");
         TextField lNameField = new TextField(member.getlName());
+        lNameField.setPromptText("Last Name");
+        Label phoneNoLabel = new Label("Phone Number:");
         TextField phoneNoField = new TextField(member.getPhoneNo());
+        phoneNoField.setPromptText("Phone No");
+        Label addressLabel = new Label("Address:");
         TextField addressField = new TextField(member.getAddress());
+        addressField.setPromptText("Address");
+        Label membershipTypeLabel = new Label("Membership Type:");
         ComboBox<String> membershipComboBox = new ComboBox<>();
         membershipComboBox.getItems().setAll("Premium", "Regular");
         membershipComboBox.setValue(member.getMembershipType().getType());
@@ -40,8 +46,9 @@ public class MemberUpdateScreen {
             stage.close();
         });
 
-        VBox layout = new VBox(10, fNameField, lNameField, phoneNoField, addressField, membershipComboBox, saveButton);
-        Scene scene = new Scene(layout, 300, 250);
+        VBox layout = new VBox(10, fnameLabel,fNameField, lnameLabel,lNameField,
+                phoneNoLabel,phoneNoField, addressLabel,addressField, membershipTypeLabel,membershipComboBox, saveButton);
+        Scene scene = new Scene(layout, 300, 350);
         stage.setScene(scene);
         stage.show();
     }
