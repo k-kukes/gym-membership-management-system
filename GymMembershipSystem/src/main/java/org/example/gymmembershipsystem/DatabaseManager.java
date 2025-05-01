@@ -129,7 +129,7 @@ public class DatabaseManager {
     public static void updateMember(Member member){
         String sql = """
                 UPDATE members
-                SET firstName = ?, lastName = ?, dob = ?, phoneNo = ?, address = ?,
+                SET username = ?, password = ?, firstName = ?, lastName = ?, dob = ?, phoneNo = ?, address = ?,
                 membershipCreation = ?, membershipType = ?, renewedMembership = ?,
                 nextPayment = ?, contractEnd = ?, latestEntry = ?, balance = ?
                 WHERE username = ?
@@ -139,19 +139,21 @@ public class DatabaseManager {
             Connection conn = DatabaseManager.getInstance().getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
 
-            stmt.setString(1, member.getfName());
-            stmt.setString(2, member.getlName());
-            stmt.setString(3, member.getDob());
-            stmt.setString(4, member.getPhoneNo());
-            stmt.setString(5, member.getAddress());
-            stmt.setString(6, member.getMembershipCreationDate());
-            stmt.setString(7, member.getMembershipType().getType());
-            stmt.setBoolean(8, member.isRenewedMembership());
-            stmt.setString(9, member.getNextPaymentDate());
-            stmt.setString(10, member.getContractEndDate());
-            stmt.setString(11, member.getLatestEntry());
-            stmt.setDouble(12, member.getBalance());
-            stmt.setString(13, member.getLoginUsername());
+            stmt.setString(1, member.getLoginUsername());
+            stmt.setString(2, member.getLoginPassword());
+            stmt.setString(3, member.getfName());
+            stmt.setString(4, member.getlName());
+            stmt.setString(5, member.getDob());
+            stmt.setString(6, member.getPhoneNo());
+            stmt.setString(7, member.getAddress());
+            stmt.setString(8, member.getMembershipCreationDate());
+            stmt.setString(9, member.getMembershipType().getType());
+            stmt.setBoolean(10, member.isRenewedMembership());
+            stmt.setString(11, member.getNextPaymentDate());
+            stmt.setString(12, member.getContractEndDate());
+            stmt.setString(13, member.getLatestEntry());
+            stmt.setDouble(14, member.getBalance());
+            stmt.setString(15, member.getLoginUsername());
 
             stmt.executeUpdate();
             System.out.println("Member updated successfully");
@@ -557,19 +559,6 @@ public class DatabaseManager {
     }
 
     public static void main(String[] args) {
-        createMembersTable();
-        createEmployeesTable();
-        Member member = new Member("BiscuitFan123", "Password", "Cookie",
-                "Monster", "1997-12-12", "600-600-6000", "Sesame street",
-                "2002-05-12", new PremiumMembership(), true,
-                "2025-09-29", "2025-09-04", "2024-04-28",
-                9807.23);
-
-        Employee employee = new Employee("Fahad", "Password", "Fahad",
-                "Malik", "2003-05-23", "514-939-2020", "675 Laval street",
-                "2024-05-23", "Nothing");
-
-//        insertEmployee(employee);
-        insertMember(member);
+        deleteMember("Kukes");
     }
 }

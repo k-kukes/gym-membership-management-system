@@ -27,11 +27,9 @@ public class MemberScreen extends Application {
         Button viewDetailsButton = new Button("View Membership Details");
         viewDetailsButton.setOnAction(e -> viewMembershipDetails());
 
-        Button updateContactButton = new Button("Update Contact Info");
+        Button updateContactButton = new Button("Update Personal Info");
         updateContactButton.setOnAction(e -> updateContactInfo());
 
-        Button renewMembershipButton = new Button("Renew Membership");
-        renewMembershipButton.setOnAction(e -> renewMembership());
 
         Button logoutButton = new Button("Logout");
         logoutButton.setOnAction(e -> {
@@ -45,7 +43,7 @@ public class MemberScreen extends Application {
             }
         });
 
-        layout.getChildren().addAll(welcomeLabel, viewDetailsButton, updateContactButton, renewMembershipButton, logoutButton);
+        layout.getChildren().addAll(welcomeLabel, viewDetailsButton, updateContactButton, logoutButton);
 
         Scene scene = new Scene(layout, 300, 250);
         stage.setScene(scene);
@@ -58,14 +56,8 @@ public class MemberScreen extends Application {
     }
 
     private void updateContactInfo(){
-        TextInputDialog inputDialog = new TextInputDialog(member.getPhoneNo());
-        inputDialog.setTitle("Update Phone Number");
-        inputDialog.setHeaderText("Enter your new phone number:");
-
-        inputDialog.showAndWait().ifPresent(phoneNo -> {
-            member.setPhoneNo(phoneNo);
-            System.out.println("Phone number updated to: " + phoneNo);
-        });
+        MemberPersonalInfoScreen memberPersonalInfoScreen = new MemberPersonalInfoScreen();
+        memberPersonalInfoScreen.showMemberInfoScreen(member);
     }
 
     private void renewMembership(){
