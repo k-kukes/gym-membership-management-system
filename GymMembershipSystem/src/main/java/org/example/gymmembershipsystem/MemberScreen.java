@@ -51,17 +51,12 @@ public class MemberScreen extends Application {
     }
 
     private void viewMembershipDetails(){
-        System.out.println("Membership Type: " + member.getMembershipType().getType());
-        System.out.println("Next Payment Date: " + member.getNextPaymentDate());
+        MembershipManagerScreen managerScreen = new MembershipManagerScreen();
+        managerScreen.show(member);
     }
 
     private void updateContactInfo(){
         MemberPersonalInfoScreen memberPersonalInfoScreen = new MemberPersonalInfoScreen();
         memberPersonalInfoScreen.showMemberInfoScreen(member);
-    }
-
-    private void renewMembership(){
-        System.out.println("Membership renewed successfully.");
-        member.setRenewedMembership(true);
     }
 }
