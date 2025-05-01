@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="075f0943-459a-4926-b6a0-4734e105d522" name="Changes" comment="" />
+    <list default="true" id="075f0943-459a-4926-b6a0-4734e105d522" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/GymMembershipSystem/src/main/resources/Messages_en_US.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GymMembershipSystem/src/main/resources/Messages_fr_FR.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gym-membership-management-system.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gym-membership-management-system.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GymMembershipSystem/src/main/java/org/example/gymmembershipsystem/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/GymMembershipSystem/src/main/java/org/example/gymmembershipsystem/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GymMembershipSystem/src/main/java/org/example/gymmembershipsystem/EmployeeManagerScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/GymMembershipSystem/src/main/resources/org/example/gymmembershipsystem/EmployeeManagerScreen.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,10 +21,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2wNb8V8CQ0P0bQCB6dYi1CaOl1B" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -22,9 +33,14 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Kukes/OneDrive/Documents/GitHub/gym-membership-management-system/GymMembershipSystem"
+    "last_opened_file_path": "C:/Users/Kukes/OneDrive/Documents/GitHub/gym-membership-management-system/GymMembershipSystem",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

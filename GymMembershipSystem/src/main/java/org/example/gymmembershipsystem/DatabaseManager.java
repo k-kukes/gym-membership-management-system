@@ -3,6 +3,22 @@ package org.example.gymmembershipsystem;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
+
+public class I18NDemo {
+    public static void main(String[] args) {
+        // Choose language (you can replace with dynamic input later)
+        Locale locale = new Locale("fr", "FR"); // Use Locale.ENGLISH for English
+
+        // Load resource bundle (from resources folder)
+        ResourceBundle bundle = ResourceBundle.getBundle("MessagesBundle", locale);
+
+        // Access localized strings
+        System.out.println(bundle.getString("greeting"));
+        System.out.println(bundle.getString("farewell"));
+    }
+}
+
 
 public class DatabaseManager {
     private static DatabaseManager dbObject;
