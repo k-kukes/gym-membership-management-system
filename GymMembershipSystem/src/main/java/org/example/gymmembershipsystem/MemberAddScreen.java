@@ -6,55 +6,55 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.ResourceBundle;
+
 public class MemberAddScreen {
-    public void showStage(Stage stage, Employee employee) throws Exception {
-        stage.setTitle("Add New Member");
+    public void showStage(Stage stage, Employee employee, ResourceBundle bundle) throws Exception {
+        stage.setTitle(bundle.getString("addMember"));
 
         TextField usernameField = new TextField();
-        usernameField.setPromptText("Username");
+        usernameField.setPromptText(bundle.getString("username"));
         PasswordField passwordField = new PasswordField();
-        passwordField.setPromptText("Password");
+        passwordField.setPromptText(bundle.getString("password"));
         TextField fNameField = new TextField();
-        fNameField.setPromptText("First Name");
+        fNameField.setPromptText(bundle.getString("firstName"));
         TextField lNameField = new TextField();
-        lNameField.setPromptText("Last Name");
+        lNameField.setPromptText(bundle.getString("lastName"));
 
         TextField dobField = new TextField();
-        dobField.setPromptText("Date of Birth (Format: YYYY-MM-DD)");
+        dobField.setPromptText(bundle.getString("dobFormat"));
         TextField phoneField = new TextField();
-        phoneField.setPromptText("Phone Number (Format: XXX-XXX-XXXX)");
+        phoneField.setPromptText(bundle.getString("phoneFormat"));
         TextField addressField = new TextField();
-        addressField.setPromptText("Address");
+        addressField.setPromptText(bundle.getString("address"));
 
         TextField membershipCreationField = new TextField();
-        membershipCreationField.setPromptText("Membership Creation Date");
-        Label membershipTypeLabel = new Label("Membership Type:");
+        membershipCreationField.setPromptText(bundle.getString("memCreationDate") + ":");
+        Label membershipTypeLabel = new Label(bundle.getString("memType") + ":");
         ComboBox<String> membershipCombo = new ComboBox<>();
-        membershipCombo.getItems().addAll("Basic", "Premium");
-        Label renewedMembershipLabel = new Label("Is Membership Renewed:");
+        membershipCombo.getItems().addAll(bundle.getString("regular"), bundle.getString("premium"));
+        Label renewedMembershipLabel = new Label(bundle.getString("isMemRenewed") + ":");
         ComboBox<Boolean> renewedMembershipBox = new ComboBox<>();
         renewedMembershipBox.getItems().addAll(Boolean.TRUE, Boolean.FALSE);
 
         TextField nextPaymentDateField = new TextField();
-        nextPaymentDateField.setPromptText("Next Payment Date (Format: YYYY-MM-DD)");
+        nextPaymentDateField.setPromptText(bundle.getString("nextPaymentFormat"));
         TextField contractEndDateField = new TextField();
-        contractEndDateField.setPromptText("Contract end date (Format: YYYY-MM-DD)");
+        contractEndDateField.setPromptText(bundle.getString("contractEndFormat"));
 
         TextField latestEntryField = new TextField();
-        latestEntryField.setPromptText("Latest Entry (Format: YYYY-MM-DD)");
+        latestEntryField.setPromptText(bundle.getString("latestEntry"));
         TextField balanceField = new TextField();
-        balanceField.setPromptText("Balance (Just Number)");
+        balanceField.setPromptText(bundle.getString("balancePrompt"));
 
-        Button addButton = new Button("Add Member");
+        Button addButton = new Button(bundle.getString("addMember"));
         addButton.setOnAction(e -> {
             // fname, lname, username, password should be NOT NULL
             // membershipType, renewedMembership, nextPayment, contractEnd, balance should be NOT NULL
             if (fNameField.getText().isEmpty() || lNameField.getText().isEmpty() || usernameField.getText().isEmpty() || passwordField.getText().isEmpty()
             || membershipCombo.getValue() == null || renewedMembershipBox.getValue() == null || nextPaymentDateField.getText().isEmpty()
             || contractEndDateField.getText().isEmpty() || balanceField.getText().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Following Fields should contain a value: \n" +
-                        "First Name, Last Name, username, password, membership Type, Membership renewed, Next Payment Date" +
-                        ", Contract End Date and Balance");
+                Alert alert = new Alert(Alert.AlertType.ERROR, bundle.getString("memCreationFields"));
                 alert.showAndWait();
             }
             else {
@@ -66,7 +66,7 @@ public class MemberAddScreen {
                 String phoneNo = phoneField.getText();
                 String address = addressField.getText();
                 String creationDate = membershipCreationField.getText();
-                Membership membershipType = membershipCombo.getValue().equals("Premium") ? new PremiumMembership() : new RegularMembership();
+                Membership membershipType = membershipCombo.getValue().equals("Premium") ? MembershipFactory.craete("premium"): MembershipFactory.craete("regular");
                 boolean renewed = renewedMembershipBox.getValue();
                 String paymentDate = nextPaymentDateField.getText();
                 String contractEnd = contractEndDateField.getText();
@@ -82,7 +82,7 @@ public class MemberAddScreen {
                         "\n" + "Added Member " + newMember.getfName() + " " + newMember.getlName());
                 DatabaseManager.updateLogs(employee);
 
-                Alert addedMemberAlert = new Alert(Alert.AlertType.INFORMATION, "Member was successfully added!");
+                Alert addedMemberAlert = new Alert(Alert.AlertType.INFORMATION,bundle.getString("memberSuccess"));
                 addedMemberAlert.showAndWait();
             }
             stage.close();

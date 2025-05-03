@@ -1,43 +1,41 @@
 package org.example.gymmembershipsystem;
 
 import javafx.application.Application;
-import javafx.application.Preloader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.ResourceBundle;
 
-public class MemberScreen extends Application {
+
+public class MemberScreen {
     private Member member;
 
     public MemberScreen(Member member){
         this.member = member;
     }
 
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        stage.setTitle("Member Screen");
+    public void start(Stage stage, ResourceBundle bundle) {
+        stage.setTitle(bundle.getString("memberScreen"));
         VBox layout = new VBox(10);
-        Label welcomeLabel = new Label("Welcome " + member.getfName() + " " + member.getlName() + "!");
+        Label welcomeLabel = new Label(bundle.getString("welcome") + " " + member.getfName() + " " + member.getlName() + "!");
 
-        Button viewDetailsButton = new Button("View Membership Details");
-        viewDetailsButton.setOnAction(e -> viewMembershipDetails());
+        Button viewDetailsButton = new Button(bundle.getString("viewMemDetails"));
+        viewDetailsButton.setOnAction(e -> viewMembershipDetails(bundle));
 
-        Button updateContactButton = new Button("Update Personal Info");
-        updateContactButton.setOnAction(e -> updateContactInfo());
+        Button updateContactButton = new Button(bundle.getString("updatePersonalInfo"));
+        updateContactButton.setOnAction(e -> updateContactInfo(bundle));
 
 
-        Button logoutButton = new Button("Logout");
+        Button logoutButton = new Button(bundle.getString("logout"));
         logoutButton.setOnAction(e -> {
             stage.close();
             LoginScreen loginScreen = new LoginScreen();
             Stage loginStage = new Stage();
             try {
-                loginScreen.start(loginStage);
+                loginScreen.start(loginStage, bundle);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -50,13 +48,13 @@ public class MemberScreen extends Application {
         stage.show();
     }
 
-    private void viewMembershipDetails(){
+    private void viewMembershipDetails(ResourceBundle bundle){
         MembershipManagerScreen managerScreen = new MembershipManagerScreen();
-        managerScreen.show(member);
+        managerScreen.show(member, bundle);
     }
 
-    private void updateContactInfo(){
+    private void updateContactInfo(ResourceBundle bundle){
         MemberPersonalInfoScreen memberPersonalInfoScreen = new MemberPersonalInfoScreen();
-        memberPersonalInfoScreen.showMemberInfoScreen(member);
+        memberPersonalInfoScreen.showMemberInfoScreen(member, bundle);
     }
 }

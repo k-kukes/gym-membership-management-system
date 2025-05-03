@@ -1,8 +1,5 @@
 package org.example.gymmembershipsystem;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 public class MemberManager {
     public MemberManager(){
 
@@ -61,9 +58,9 @@ public class MemberManager {
         String current = member.getMembershipType().getType();
 
         if (current.equals("Premium"))
-            member.setMembershipType(new PremiumMembership());
+            member.setMembershipType(MembershipFactory.craete("premium"));
         else
-            member.setMembershipType(new RegularMembership());
+            member.setMembershipType(MembershipFactory.craete("regular"));
 
         DatabaseManager.updateMemberMembershipType(member);
 

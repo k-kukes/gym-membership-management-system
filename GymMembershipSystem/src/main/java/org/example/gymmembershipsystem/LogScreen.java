@@ -6,26 +6,22 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ResourceBundle;
 
 public class LogScreen {
     private TableView<String> logsTable;
     private ObservableList<String> logsData;
 
-    public void showLogScreen(Employee employee){
-        Label titleLabel = new Label("Employee " + employee.getfName() + " " + employee.getlName() + " activity");
+    public void showLogScreen(Employee employee, ResourceBundle bundle){
+        Label titleLabel = new Label(bundle.getString("employee") + " " + employee.getfName() + " " + employee.getlName() + " " + bundle.getString("activity"));
         logsTable = new TableView<>();
 
-        TableColumn<String, String> logCol = new TableColumn<>("Activity Message");
+        TableColumn<String, String> logCol = new TableColumn<>(bundle.getString("activityMsg"));
         logCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         logCol.setPrefWidth(500);
         logsTable.getColumns().add(logCol);
@@ -39,7 +35,7 @@ public class LogScreen {
         VBox layout = new VBox(10, titleLabel, logsTable);
         Scene scene = new Scene(layout, 500, 400);
         stage.setScene(scene);
-        stage.setTitle("Employee Logs");
+        stage.setTitle(bundle.getString("employeeLogs"));
         stage.show();
     }
 }

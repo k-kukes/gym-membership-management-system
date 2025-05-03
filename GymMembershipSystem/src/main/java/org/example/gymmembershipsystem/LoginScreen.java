@@ -1,26 +1,26 @@
 package org.example.gymmembershipsystem;
 
-import javafx.application.Application;
-import javafx.application.Preloader;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 
-public class LoginScreen extends Application {
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+public class LoginScreen {
     private TextField usernameField;
     private PasswordField passwordField;
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        Label usernameLabel = new Label("Username: ");
+    public void start(Stage stage, ResourceBundle bundle){
+        Label usernameLabel = new Label(bundle.getString("username") + ":");
         usernameField = new TextField();
-        Label passwordLabel = new Label("Password: ");
+        Label passwordLabel = new Label(bundle.getString("password") + ":");
         passwordField = new PasswordField();
 
-        Label chooseLoginLabel = new Label("Login As: ");
-        Button loginMemberButton = new Button("Member");
-        Button loginEmployeeButton = new Button("Employee");
+        Label chooseLoginLabel = new Label(bundle.getString("loginPick") + ":");
+        Button loginMemberButton = new Button(bundle.getString("member") + ":");
+        Button loginEmployeeButton = new Button(bundle.getString("employee") + ":");
 
         loginMemberButton.setOnAction(e -> {
             String username = usernameField.getText();
@@ -28,11 +28,10 @@ public class LoginScreen extends Application {
 
             Member member = MemberManager.login(username, password);
             if (member != null) {
-                System.out.println("Member logged in successfully!");
                 MemberScreen memberScreen = new MemberScreen(member);
                 Stage memberStage = new Stage();
                 try {
-                    memberScreen.start(memberStage);
+                    memberScreen.start(memberStage, bundle);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
@@ -41,7 +40,8 @@ public class LoginScreen extends Application {
                 loginStage.close();
             }
             else {
-                System.out.println("Invalid username or password");
+                Alert alert = new Alert(Alert.AlertType.WARNING, bundle.getString("incorrectLogin"));
+                alert.showAndWait();
             }
         });
 
@@ -55,7 +55,7 @@ public class LoginScreen extends Application {
                 EmployeeScreen employeeScreen = new EmployeeScreen(employee);
                 Stage employeeStage = new Stage();
                 try {
-                    employeeScreen.start(employeeStage);
+                    employeeScreen.start(employeeStage, bundle);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
@@ -63,21 +63,19 @@ public class LoginScreen extends Application {
                 loginStage.close();
             }
             else {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Invalid Username Or Password!");
+                Alert alert = new Alert(Alert.AlertType.WARNING, bundle.getString("incorrectLogin"));
                 alert.showAndWait();
             }
         });
 
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(usernameLabel, usernameField, passwordLabel, passwordField, chooseLoginLabel, loginMemberButton, loginEmployeeButton);
+        layout.getChildren().addAll(usernameLabel, usernameField, passwordLabel, passwordField, chooseLoginLabel,
+                loginMemberButton, loginEmployeeButton);
 
         Scene scene = new Scene(layout, 300, 250);
         stage.setScene(scene);
-        stage.setTitle("Gym Management System LOGIN");
+        stage.setTitle(bundle.getString("loginTitle"));
         stage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }

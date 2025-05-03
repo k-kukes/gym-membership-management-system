@@ -3,22 +3,6 @@ package org.example.gymmembershipsystem;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
-
-//public class I18NDemo {
-//    public static void main(String[] args) {
-//        // Choose language (you can replace with dynamic input later)
-//        Locale locale = new Locale("fr", "FR"); // Use Locale.ENGLISH for English
-//
-//        // Load resource bundle (from resources folder)
-//        ResourceBundle bundle = ResourceBundle.getBundle("MessagesBundle", locale);
-//
-//        // Access localized strings
-//        System.out.println(bundle.getString("greeting"));
-//        System.out.println(bundle.getString("farewell"));
-//    }
-//}
-
 
 public class DatabaseManager {
     private static DatabaseManager dbObject;
@@ -111,9 +95,9 @@ public class DatabaseManager {
         String sql = """
                 INSERT INTO members (
                 username, password, firstName, lastName, dob, phoneNo, address, membershipCreation,
-                membershipType, renewedMembership, nextPayment, contractEnd, latestEntry
+                membershipType, renewedMembership, nextPayment, contractEnd, latestEntry, balance
                 )
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                 """;
 
         try {
@@ -133,6 +117,7 @@ public class DatabaseManager {
             statement.setString(11, member.getNextPaymentDate());
             statement.setString(12, member.getContractEndDate());
             statement.setString(13, member.getLatestEntry());
+            statement.setDouble(14, member.getBalance());
 
             statement.executeUpdate();
             System.out.println("Member was successfully created!");
@@ -207,36 +192,6 @@ public class DatabaseManager {
             System.out.println("Employee inserted successfully");
         }
         catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public static void updateEmployee(Employee employee){
-        String sql = """
-                UPDATE employees
-                SET firstName = ?, lastName = ?, dob = ?, phoneNo = ?, address = ?,
-                dateHired = ?, latestLog = ?
-                WHERE username = ?
-                """;
-
-        try {
-            Connection conn = DatabaseManager.getInstance().getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-
-            stmt.setString(1, employee.getfName());
-            stmt.setString(2, employee.getlName());
-            stmt.setString(3, employee.getDob());
-            stmt.setString(4, employee.getPhoneNo());
-            stmt.setString(5, employee.getAddress());
-            stmt.setString(6, employee.getDateHired());
-            stmt.setString(7, employee.getLatestLog());
-            stmt.setString(8, employee.getLoginUsername());
-
-            stmt.executeUpdate();
-            System.out.println("Employee updated successfully");
-        }
-        catch (SQLException e){
-            System.out.println("Couldn't Update Employee");
             System.out.println(e.getMessage());
         }
     }
@@ -396,7 +351,7 @@ public class DatabaseManager {
                         set.getString("phoneNo"),
                         set.getString("address"),
                         set.getString("membershipCreation"),
-                        set.getString("membershipType").equalsIgnoreCase("Premium") ? new PremiumMembership() : new RegularMembership(),
+                        set.getString("membershipType").equalsIgnoreCase("Premium") ? MembershipFactory.craete("premium") : MembershipFactory.craete("regular"),
                         set.getBoolean("renewedMembership"),
                         set.getString("nextPayment"),
                         set.getString("contractEnd"),
@@ -464,7 +419,7 @@ public class DatabaseManager {
                         set.getString("phoneNo"),
                         set.getString("address"),
                         set.getString("membershipCreation"),
-                        set.getString("membershipType").equalsIgnoreCase("Premium") ? new PremiumMembership() : new RegularMembership(),
+                        set.getString("membershipType").equalsIgnoreCase("Premium") ? MembershipFactory.craete("premium") : MembershipFactory.craete("regular"),
                         set.getBoolean("renewedMembership"),
                         set.getString("nextPayment"),
                         set.getString("contractEnd"),
@@ -499,7 +454,7 @@ public class DatabaseManager {
                         set.getString("phoneNo"),
                         set.getString("address"),
                         set.getString("membershipCreation"),
-                        set.getString("membershipType").equalsIgnoreCase("Premium") ? new PremiumMembership() : new RegularMembership(),
+                        set.getString("membershipType").equalsIgnoreCase("Premium") ? MembershipFactory.craete("premium"): MembershipFactory.craete("regular"),
                         set.getBoolean("renewedMembership"),
                         set.getString("nextPayment"),
                         set.getString("contractEnd"),
@@ -567,6 +522,21 @@ public class DatabaseManager {
             Connection conn = DatabaseManager.getInstance().getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, member.getLoginUsername());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void updateMemberBalance(Member member){
+        String sql = "UPDATE members SET balance = ? WHERE username = ?";
+
+        try {
+            Connection conn = DatabaseManager.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setDouble(1, member.getBalance());
+            stmt.setString(2, member.getLoginUsername());
             stmt.executeUpdate();
         }
         catch (SQLException e){

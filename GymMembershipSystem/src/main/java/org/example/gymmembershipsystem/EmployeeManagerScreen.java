@@ -1,7 +1,5 @@
 package org.example.gymmembershipsystem;
 
-import javafx.application.Application;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,8 +10,9 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class EmployeeManagerScreen extends Application {
+public class EmployeeManagerScreen {
     private Employee employee;
     private TableView<Employee> employeeTable;
     private TextField searchField;
@@ -22,19 +21,18 @@ public class EmployeeManagerScreen extends Application {
     public EmployeeManagerScreen(Employee employee){
         this.employee = employee;
     }
-    @Override
-    public void start(Stage stage) throws Exception {
-        stage.setTitle("Employee Manager");
+    public void start(Stage stage, ResourceBundle bundle) {
+        stage.setTitle(bundle.getString("employeeManager"));
         BorderPane layout = new BorderPane();
 
-        Label searchLabel = new Label("Search by: ");
+        Label searchLabel = new Label(bundle.getString("searchBy"));
 
-        CheckBox searchByUsername = new CheckBox("Username ");
-        CheckBox searchByFirstName = new CheckBox("First Name ");
-        CheckBox searchByLastName = new CheckBox("Last Name ");
+        CheckBox searchByUsername = new CheckBox(bundle.getString("username"));
+        CheckBox searchByFirstName = new CheckBox(bundle.getString("firstName"));
+        CheckBox searchByLastName = new CheckBox(bundle.getString("lastName"));
 
         searchField = new TextField();
-        searchField.setPromptText("Search employees...");
+        searchField.setPromptText(bundle.getString("searchEmployee"));
         searchField.setOnKeyReleased(e -> {
             String filter = "firstName";
             if (searchByUsername.isSelected())
@@ -54,13 +52,13 @@ public class EmployeeManagerScreen extends Application {
         employeeData = FXCollections.observableArrayList();
         employeeTable.setItems(employeeData);
 
-        TableColumn<Employee, String> usernameCol = new TableColumn<>("Username");
+        TableColumn<Employee, String> usernameCol = new TableColumn<>(bundle.getString("username"));
         usernameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLoginUsername()));
 
-        TableColumn<Employee, String> firstNameColumn = new TableColumn<>("First Name");
+        TableColumn<Employee, String> firstNameColumn = new TableColumn<>(bundle.getString("firstName"));
         firstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getfName()));
 
-        TableColumn<Employee, String> lastNameColumn = new TableColumn<>("Last Name");
+        TableColumn<Employee, String> lastNameColumn = new TableColumn<>(bundle.getString("lastName"));
         lastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getlName()));
 
         employeeTable.getColumns().add(usernameCol);
@@ -70,19 +68,19 @@ public class EmployeeManagerScreen extends Application {
         layout.setCenter(employeeTable);
 
 
-        Button deleteButton = new Button("Delete Employee ");
-        deleteButton.setOnAction(e -> deleteEmployee());
+        Button deleteButton = new Button(bundle.getString("deleteEmployee"));
+        deleteButton.setOnAction(e -> deleteEmployee(bundle));
 
-        Button addEmployeeButton = new Button("Add Employee ");
+        Button addEmployeeButton = new Button(bundle.getString("employeeAdd"));
         addEmployeeButton.setOnAction(e -> {
             try {
-                EmployeeAddScreen.show();
+                EmployeeAddScreen.show(bundle);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         });
 
-        Button refreshButton = new Button("Refresh Table ");
+        Button refreshButton = new Button(bundle.getString("refresh"));
         refreshButton.setOnAction( e -> loadAllEmployees());
 
         HBox bottomButtons = new HBox(deleteButton, addEmployeeButton, refreshButton);
@@ -106,27 +104,26 @@ public class EmployeeManagerScreen extends Application {
         }
     }
 
-    private boolean deleteEmployee(){
+    private boolean deleteEmployee(ResourceBundle bundle){
         Employee emp = employeeTable.getSelectionModel().getSelectedItem();
 
         if (employeeTable.getItems().size() == 1){
-            Alert oneEmployeeAlert = new Alert(Alert.AlertType.ERROR, "Only 1 Employee, Can't Delete!");
+            Alert oneEmployeeAlert = new Alert(Alert.AlertType.ERROR, bundle.getString("oneEmployee"));
             oneEmployeeAlert.showAndWait();
             return false;
         }
 
         if (emp.getLoginUsername().equals(employee.getLoginUsername())){
-            Alert selfDeleteAlert = new Alert(Alert.AlertType.ERROR, "Can't delete yourself!");
+            Alert selfDeleteAlert = new Alert(Alert.AlertType.ERROR, bundle.getString("deleteYs"));
             selfDeleteAlert.showAndWait();
             return false;
         }
 
         if (emp != null){
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION,
-                    "Are you sure you want to delete the employee?", ButtonType.YES, ButtonType.NO);
+                    bundle.getString("deleteConfEmp"), ButtonType.YES, ButtonType.NO);
             confirmationAlert.showAndWait().ifPresent(input -> {
                 if (input == ButtonType.YES){
-                    System.out.println("Deleting employee");
                     DatabaseManager.deleteEmployee(emp.getLoginUsername());
                     loadAllEmployees();
                 }

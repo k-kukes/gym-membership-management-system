@@ -32,3 +32,13 @@ class PremiumMembership implements Membership{
         return 22.99;
     }
 }
+
+class MembershipFactory{
+    public static Membership craete(String type){
+        return switch (type){
+            case "premium" -> new PremiumMembership();
+            case "regular" -> new RegularMembership();
+            default ->  throw new IllegalStateException("Unknown Membership Type");
+        };
+    }
+}

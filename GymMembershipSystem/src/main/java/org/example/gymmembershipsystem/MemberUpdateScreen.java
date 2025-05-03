@@ -6,46 +6,48 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class MemberUpdateScreen {
-    public static void showUpdateForm(Member member, Employee employee){
-        Stage stage = new Stage();
-        stage.setTitle("Update Member");
+import java.util.ResourceBundle;
 
-        Label fnameLabel = new Label("First Name:");
+public class MemberUpdateScreen {
+    public static void showUpdateForm(Member member, Employee employee, ResourceBundle bundle){
+        Stage stage = new Stage();
+        stage.setTitle(bundle.getString("updateMember"));
+
+        Label fnameLabel = new Label(bundle.getString("username")  + ":");
         TextField fNameField = new TextField(member.getfName());
-        fNameField.setPromptText("First Name");
+        fNameField.setPromptText(bundle.getString("firstName")  + ":");
         Label lnameLabel = new Label("Last Name:");
         TextField lNameField = new TextField(member.getlName());
-        lNameField.setPromptText("Last Name");
-        Label phoneNoLabel = new Label("Phone Number:");
+        lNameField.setPromptText(bundle.getString("lastName")  + ":");
+        Label phoneNoLabel = new Label(bundle.getString("phoneNo"));
         TextField phoneNoField = new TextField(member.getPhoneNo());
-        phoneNoField.setPromptText("Phone No");
-        Label addressLabel = new Label("Address:");
+        phoneNoField.setPromptText(bundle.getString("phoneNo"));
+        Label addressLabel = new Label(bundle.getString("address"));
         TextField addressField = new TextField(member.getAddress());
-        addressField.setPromptText("Address");
-        Label membershipTypeLabel = new Label("Membership Type:");
+        addressField.setPromptText(bundle.getString("address"));
+        Label membershipTypeLabel = new Label(bundle.getString("memType"));
         ComboBox<String> membershipComboBox = new ComboBox<>();
-        membershipComboBox.getItems().setAll("Premium", "Regular");
+        membershipComboBox.getItems().setAll(bundle.getString("premium"), bundle.getString("regular"));
         membershipComboBox.setValue(member.getMembershipType().getType());
 
-        Button saveButton = new Button("Save");
+        Button saveButton = new Button(bundle.getString("save"));
         saveButton.setOnAction(e -> {
             member.setfName(fNameField.getText());
             member.setlName(lNameField.getText());
             member.setPhoneNo(phoneNoField.getText());
             member.setAddress(addressField.getText());
             if (membershipComboBox.getValue().equals("Premium"))
-                member.setMembershipType(new PremiumMembership());
+                member.setMembershipType(MembershipFactory.craete("premium"));
             else
-                member.setMembershipType(new RegularMembership());
+                member.setMembershipType(MembershipFactory.craete("regular"));
             DatabaseManager.updateMember(member);
 
             employee.setLatestLog(employee.getLatestLog() + "\n" + "Updated Member " + member.getfName() + " " + member.getlName());
             DatabaseManager.updateLogs(employee);
 
             Alert success = new Alert(Alert.AlertType.INFORMATION);
-            success.setTitle("Success");
-            success.setContentText("Member updated successfully!");
+            success.setTitle(bundle.getString("success"));
+            success.setContentText(bundle.getString("memberUpdateSuccess"));
             success.showAndWait();
             stage.close();
         });

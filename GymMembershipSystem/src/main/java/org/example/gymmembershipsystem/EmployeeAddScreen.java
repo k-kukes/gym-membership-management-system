@@ -9,37 +9,39 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public class EmployeeAddScreen{
 
-    public static void show() throws Exception {
+    public static void show(ResourceBundle bundle) throws Exception {
         Stage stage = new Stage();
-        stage.setTitle("Add New Employee");
+        stage.setTitle(bundle.getString("employeeAdd"));
 
         TextField usernameField = new TextField();
-        usernameField.setPromptText("Username");
+        usernameField.setPromptText(bundle.getString("username"));
         PasswordField passwordField = new PasswordField();
-        passwordField.setPromptText("Password");
+        passwordField.setPromptText(bundle.getString("password"));
         TextField firstNameField = new TextField();
-        firstNameField.setPromptText("First Name");
+        firstNameField.setPromptText(bundle.getString("firstName"));
         TextField lastNameField = new TextField();
-        lastNameField.setPromptText("Last Name");
+        lastNameField.setPromptText(bundle.getString("lastName"));
         TextField dobField = new TextField();
-        dobField.setPromptText("Date of Birth");
+        dobField.setPromptText(bundle.getString("dob"));
         TextField phoneNoField = new TextField();
-        phoneNoField.setPromptText("Phone Number");
+        phoneNoField.setPromptText(bundle.getString("phoneNo"));
         TextField addressField = new TextField();
-        addressField.setPromptText("Address");
+        addressField.setPromptText(bundle.getString("address"));
         TextField dateHiredField = new TextField();
-        dateHiredField.setPromptText("Date Hired");
+        dateHiredField.setPromptText(bundle.getString("dateHired"));
         TextField latestLogField = new TextField();
-        latestLogField.setPromptText("Latest log");
+        latestLogField.setPromptText(bundle.getString("latestLog"));
 
-        Button addButton = new Button("Add Employee");
+        Button addButton = new Button(bundle.getString("employeeAdd"));
         addButton.setOnAction(e -> {
             if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()
             || firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()){
-                Alert warningAlert = new Alert(Alert.AlertType.ERROR, "Following Fields should contain a value: \n" +
-                        "First Name, Last Name, username and password");
+                Alert warningAlert = new Alert(Alert.AlertType.ERROR, bundle.getString("fields"));
                 warningAlert.showAndWait();
             }
             else {
@@ -49,7 +51,7 @@ public class EmployeeAddScreen{
                         latestLogField.getText());
 
                 DatabaseManager.insertEmployee(newEmployee);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Employee added successfully");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, bundle.getString("successEmployee"));
                 alert.showAndWait();
             }
             stage.close();

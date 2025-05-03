@@ -9,20 +9,22 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.w3c.dom.Text;
 
+import java.util.ResourceBundle;
+
 public class MemberPersonalInfoScreen {
-    public void showMemberInfoScreen(Member member){
+    public void showMemberInfoScreen(Member member, ResourceBundle bundle){
         VBox infoBox = new VBox(10);
-        Label titleLabel = new Label("Your Personal Information");
+        Label titleLabel = new Label(bundle.getString("personalInfo"));
 
-        Label nameLabel = new Label("Full Name: " + member.getfName() + " " + member.getlName());
-        Label usernameLabel = new Label("Username: " + member.getLoginUsername());
-        Label passwordLabel = new Label("Password: " + member.getLoginPassword());
-        Label dobLabel = new Label("Date Of Birth: " + member.getDob());
-        Label phoneLabel = new Label("Phone Number: " + member.getPhoneNo());
-        Label addresslabel = new Label("Address: " + member.getAddress());
+        Label nameLabel = new Label(bundle.getString("firstName") + ": " + member.getfName() + " " + member.getlName());
+        Label usernameLabel = new Label(bundle.getString("username") + ": " + member.getLoginUsername());
+        Label passwordLabel = new Label(bundle.getString("password")+ ": " + member.getLoginPassword());
+        Label dobLabel = new Label(bundle.getString("dob")+ ": " + member.getDob());
+        Label phoneLabel = new Label(bundle.getString("phoneNo")+ ": " + member.getPhoneNo());
+        Label addresslabel = new Label(bundle.getString("address")+ ": " + member.getAddress());
 
-        Button updateButton = new Button("Update Info");
-        updateButton.setOnAction(e -> showInfoUpdateScreen(member));
+        Button updateButton = new Button(bundle.getString("updateInfo"));
+        updateButton.setOnAction(e -> showInfoUpdateScreen(member, bundle));
 
         infoBox.getChildren().addAll(titleLabel, nameLabel, usernameLabel, passwordLabel,
                 dobLabel, phoneLabel, addresslabel, updateButton);
@@ -30,24 +32,24 @@ public class MemberPersonalInfoScreen {
         Stage stage = new Stage();
         Scene scene = new Scene(infoBox, 300, 300);
         stage.setScene(scene);
-        stage.setTitle("Your Profile");
+        stage.setTitle(bundle.getString("profile"));
         stage.show();
     }
 
-    public void showInfoUpdateScreen(Member member){
+    public void showInfoUpdateScreen(Member member, ResourceBundle bundle){
         VBox vBox = new VBox(10);
-        Label titleLabel = new Label("Update Personal Information");
+        Label titleLabel = new Label(bundle.getString("updatePersonalInfo"));
 
         TextField usernameField = new TextField(member.getLoginUsername());
-        usernameField.setPromptText("Username");
+        usernameField.setPromptText(bundle.getString("username"));
         TextField passwordField = new TextField(member.getLoginPassword());
-        passwordField.setPromptText("Password");
+        passwordField.setPromptText(bundle.getString("password"));
         TextField phoneLabel = new TextField(member.getPhoneNo());
-        phoneLabel.setPromptText("Phone Number");
+        phoneLabel.setPromptText(bundle.getString("phoneNo"));
         TextField addressLabel = new TextField(member.getAddress());
-        addressLabel.setPromptText("Address");
+        addressLabel.setPromptText(bundle.getString("address"));
 
-        Button updateButton = new Button("Update");
+        Button updateButton = new Button(bundle.getString("update"));
 
         updateButton.setOnAction(e -> {
             member.setLoginUsername(usernameField.getText());
@@ -56,7 +58,7 @@ public class MemberPersonalInfoScreen {
             member.setAddress(addressLabel.getText());
 
             DatabaseManager.updateMember(member);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Updated your information");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, bundle.getString("updatedInfo"));
             alert.showAndWait();
         });
 
@@ -64,7 +66,7 @@ public class MemberPersonalInfoScreen {
         Stage stage = new Stage();
         Scene scene = new Scene(vBox, 400, 350);
         stage.setScene(scene);
-        stage.setTitle("Update Your Personal Information");
+        stage.setTitle(bundle.getString("updatePersonalInfo"));
         stage.show();
     }
 }

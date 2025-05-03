@@ -9,42 +9,42 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class MemberManagerScreen extends Application {
+public class MemberManagerScreen {
     private Employee employee;
     private TableView<Member> memberTable;
     private TextField searchField;
     private ObservableList<Member> memberData;
 
-    public MemberManagerScreen(Employee employee){
+    public MemberManagerScreen(Employee employee) {
         this.employee = employee;
     }
 
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        stage.setTitle("Member Manager");
+    public void start(Stage stage, ResourceBundle bundle) {
+        stage.setTitle(bundle.getString("memberManager"));
         BorderPane layout = new BorderPane();
 
-        Label searchLabel = new Label("Search by: ");
+        Label searchLabel = new Label(bundle.getString("searchBy"));
 
-        CheckBox searchByUsername = new CheckBox("Username ");
-        CheckBox searchByFirstName = new CheckBox("First Name ");
-        CheckBox searchByLastName = new CheckBox("Last Name ");
-        CheckBox searchByPhoneNo = new CheckBox("Phone No ");
+        CheckBox searchByUsername = new CheckBox(bundle.getString("username"));
+        CheckBox searchByFirstName = new CheckBox(bundle.getString("firstName"));
+        CheckBox searchByLastName = new CheckBox(bundle.getString("lastName"));
+        CheckBox searchByPhoneNo = new CheckBox(bundle.getString("phoneNo"));
 
         searchField = new TextField();
-        searchField.setPromptText("Search members...");
+        searchField.setPromptText(bundle.getString("searchMembers"));
         searchField.setOnKeyReleased(e -> {
             String filter = "firstName";
             if (searchByUsername.isSelected())
                 filter = "username";
-            if (searchByFirstName.isSelected())
-                filter = "firstName";
+            if (searchByFirstName.isSelected()){
+                filterByName(memberData);
+            }
             if (searchByLastName.isSelected())
                 filter = "lastName";
             if (searchByPhoneNo.isSelected())
@@ -53,38 +53,38 @@ public class MemberManagerScreen extends Application {
             searchMembers(filter);
         });
 
-        HBox searchBox = new HBox(searchLabel, searchByUsername,searchByFirstName, searchByLastName, searchByPhoneNo, searchField);
+        HBox searchBox = new HBox(searchLabel, searchByUsername, searchByFirstName, searchByLastName, searchByPhoneNo, searchField);
         layout.setTop(searchBox);
 
         memberTable = new TableView<>();
         memberData = FXCollections.observableArrayList();
         memberTable.setItems(memberData);
 
-        TableColumn<Member, String> usernameCol = new TableColumn<>("Username");
+        TableColumn<Member, String> usernameCol = new TableColumn<>(bundle.getString("username"));
         usernameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLoginUsername()));
 
-        TableColumn<Member, String> firstNameColumn = new TableColumn<>("First Name");
+        TableColumn<Member, String> firstNameColumn = new TableColumn<>(bundle.getString("firstName"));
         firstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getfName()));
 
-        TableColumn<Member, String> lastNameColumn = new TableColumn<>("Last Name");
+        TableColumn<Member, String> lastNameColumn = new TableColumn<>(bundle.getString("lastName"));
         lastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getlName()));
 
-        TableColumn<Member, String> membershipTypeCol = new TableColumn<>("Membership Type");
+        TableColumn<Member, String> membershipTypeCol = new TableColumn<>(bundle.getString("memType"));
         membershipTypeCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMembershipType().getType()));
 
-        TableColumn<Member, String> phoneCol = new TableColumn<>("Phone Number");
+        TableColumn<Member, String> phoneCol = new TableColumn<>(bundle.getString("phoneNo"));
         phoneCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhoneNo()));
 
-        TableColumn<Member, Boolean> renewedMemCol = new TableColumn<>("Renewed");
+        TableColumn<Member, Boolean> renewedMemCol = new TableColumn<>(bundle.getString("renewed"));
         renewedMemCol.setCellValueFactory(data -> new SimpleBooleanProperty(data.getValue().isRenewedMembership()));
 
-        TableColumn<Member, String> nextPaymentCol = new TableColumn<>("Next Payment Date");
+        TableColumn<Member, String> nextPaymentCol = new TableColumn<>(bundle.getString("nextPayment"));
         nextPaymentCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNextPaymentDate()));
 
-        TableColumn<Member, String> contractEndCol = new TableColumn<>("Contract End Date");
+        TableColumn<Member, String> contractEndCol = new TableColumn<>(bundle.getString("contractEnd"));
         contractEndCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getContractEndDate()));
 
-        TableColumn<Member, String> latestEntryCol = new TableColumn<>("Latest Entry");
+        TableColumn<Member, String> latestEntryCol = new TableColumn<>(bundle.getString("latestEntry"));
         latestEntryCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLatestEntry()));
 
         memberTable.getColumns().add(usernameCol);
@@ -99,16 +99,16 @@ public class MemberManagerScreen extends Application {
 
         layout.setCenter(memberTable);
 
-        Button updateButton = new Button("Update");
-        updateButton.setOnAction(e -> updateMember());
+        Button updateButton = new Button(bundle.getString("update"));
+        updateButton.setOnAction(e -> updateMember(bundle));
 
-        Button deleteButton = new Button("Delete");
-        deleteButton.setOnAction(e -> deleteMember());
+        Button deleteButton = new Button(bundle.getString("delete"));
+        deleteButton.setOnAction(e -> deleteMember(bundle));
 
-        Button addButton = new Button("Add New Member");
-        addButton.setOnAction(e -> addMember());
+        Button addButton = new Button(bundle.getString("addMember"));
+        addButton.setOnAction(e -> addMember(bundle));
 
-        Button refreshTable = new Button("Refresh Table");
+        Button refreshTable = new Button(bundle.getString("refresh"));
         refreshTable.setOnAction(e -> loadAllMembers());
 
         HBox bottomButtons = new HBox(10, updateButton, deleteButton, addButton, refreshTable);
@@ -121,30 +121,28 @@ public class MemberManagerScreen extends Application {
         loadAllMembers();
     }
 
-    private void addMember(){
+    private void addMember(ResourceBundle bundle) {
         MemberAddScreen memberAddScreen = new MemberAddScreen();
         Stage stage = new Stage();
         try {
-            memberAddScreen.showStage(stage, employee);
-        }
-        catch (Exception e){
+            memberAddScreen.showStage(stage, employee, bundle);
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private void loadAllMembers(){
+    private void loadAllMembers() {
         try {
             List<Member> memberList = DatabaseManager.getAllMembers();
             memberData.clear();
             memberData.addAll(memberList);
-        }
-        catch (Exception e){
-            Alert alert = new Alert(Alert.AlertType.ERROR,e.getMessage());
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
             alert.showAndWait();
         }
     }
 
-    private void searchMembers(String filter){
+    private void searchMembers(String filter) {
         String search = searchField.getText();
         if (search.isEmpty())
             loadAllMembers();
@@ -155,22 +153,21 @@ public class MemberManagerScreen extends Application {
         }
     }
 
-    private void updateMember(){
+    private void updateMember(ResourceBundle bundle) {
         Member member = memberTable.getSelectionModel().getSelectedItem();
-        if (member != null){
-            MemberUpdateScreen.showUpdateForm(member, employee);
+        if (member != null) {
+            MemberUpdateScreen.showUpdateForm(member, employee, bundle);
             loadAllMembers();
         }
     }
 
-    private void deleteMember(){
+    private void deleteMember(ResourceBundle bundle) {
         Member member = memberTable.getSelectionModel().getSelectedItem();
-        if (member != null){
+        if (member != null) {
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION,
-                    "Are you sure you want to delete the member?", ButtonType.YES, ButtonType.NO);
+                    bundle.getString("deleteMemberConf"), ButtonType.YES, ButtonType.NO);
             confirmationAlert.showAndWait().ifPresent(input -> {
-                if (input == ButtonType.YES){
-                    System.out.println("Deleting member");
+                if (input == ButtonType.YES) {
                     employee.setLatestLog(employee.getLatestLog() + "\n" + "Deleted Member " +
                             member.getfName() + " " + member.getlName());
                     DatabaseManager.updateLogs(employee);
@@ -181,7 +178,11 @@ public class MemberManagerScreen extends Application {
         }
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    private void filterByName(List<Member> members){
+        List<Member> result = members.stream()
+                .filter(member -> member.getfName().toLowerCase().contains(searchField.getText().toLowerCase()))
+                .toList();
+        memberData.clear();
+        memberData.addAll(result);
     }
 }

@@ -1,43 +1,40 @@
 package org.example.gymmembershipsystem;
 
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-
-public class EmployeeScreen extends Application {
+public class EmployeeScreen{
     private Employee employee;
 
     public EmployeeScreen(Employee employee){
         this.employee = employee;
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        stage.setTitle("Employee Main Screen");
+    public void start(Stage stage, ResourceBundle bundle) {
+        stage.setTitle(bundle.getString("employeeScreen"));
         VBox layout = new VBox(10);
-        Label welcomeLabel = new Label("Welcome Employee " + employee.getfName() + " " + employee.getlName());
+        Label welcomeLabel = new Label(bundle.getString("welcomeEmployee") + " " + employee.getfName() + " " + employee.getlName());
 
-        Button manageMembersButton = new Button("Manage Members");
-        manageMembersButton.setOnAction(e -> manageMembers());
+        Button manageMembersButton = new Button(bundle.getString("manageMembers"));
+        manageMembersButton.setOnAction(e -> manageMembers(bundle));
 
-        Button manageEmployeesButton = new Button("Manage Employees");
-        manageEmployeesButton.setOnAction(e -> manageEmployees());
+        Button manageEmployeesButton = new Button(bundle.getString("manageEmployees"));
+        manageEmployeesButton.setOnAction(e -> manageEmployees(bundle));
 
-        Button viewLogsButton = new Button("View Latest Activity");
-        viewLogsButton.setOnAction(e -> viewActivityLogs());
+        Button viewLogsButton = new Button(bundle.getString("viewLogs"));
+        viewLogsButton.setOnAction(e -> viewActivityLogs(bundle));
 
-        Button logoutButton = new Button("Logout");
+        Button logoutButton = new Button(bundle.getString("logout"));
         logoutButton.setOnAction(e -> {
             LoginScreen loginScreen = new LoginScreen();
             Stage loginStage = new Stage();
             try {
-                loginScreen.start(loginStage);
+                loginScreen.start(loginStage, bundle);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -50,37 +47,31 @@ public class EmployeeScreen extends Application {
         stage.show();
     }
 
-    private void manageMembers(){
-        System.out.println("Managing members...");
+    private void manageMembers(ResourceBundle bundle){
         MemberManagerScreen memberManagerScreen = new MemberManagerScreen(employee);
         Stage stage = new Stage();
         try {
-            memberManagerScreen.start(stage);
+            memberManagerScreen.start(stage, bundle);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
-    private void manageEmployees(){
-        System.out.println("Managing Employees...");
+    private void manageEmployees(ResourceBundle bundle){
         EmployeeManagerScreen employeeManagerScreen = new EmployeeManagerScreen(employee);
         Stage stage = new Stage();
         try {
-            employeeManagerScreen.start(stage);
+            employeeManagerScreen.start(stage, bundle);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
-    private void viewActivityLogs(){
-        System.out.println("Viewing employee activity logs...");
+    private void viewActivityLogs(ResourceBundle bundle){
         LogScreen screen = new LogScreen();
-        screen.showLogScreen(employee);
+        screen.showLogScreen(employee, bundle);
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
